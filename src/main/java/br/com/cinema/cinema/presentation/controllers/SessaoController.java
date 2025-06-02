@@ -6,6 +6,7 @@ import br.com.cinema.cinema.domain.entities.Assento;
 import br.com.cinema.cinema.domain.entities.Sessao;
 import br.com.cinema.cinema.domain.repositories.SessaoRepository;
 import br.com.cinema.cinema.presentation.dtos.AssentoDTO;
+import br.com.cinema.cinema.presentation.dtos.SessaoStatusDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,6 +65,13 @@ public class SessaoController {
                 .toList();
 
         return ResponseEntity.ok(assentosDTO);
+    }
+    @GetMapping("/{sessaoId}/status")
+    public ResponseEntity<SessaoStatusDTO> consultarStatus(@PathVariable Long sessaoId) {
+        Sessao sessao = sessaoRepository.buscarPorId(sessaoId)
+                .orElseThrow(() -> new IllegalArgumentException("Sessão não encontrada"));
+
+        return ResponseEntity.ok(new SessaoStatusDTO(sessao.getStatus().name()));
     }
 }
 
